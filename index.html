@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Whiteboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='4' y='4' width='24' height='24' rx='4' fill='%23fde047'/></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="config.js"></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <!-- Inloggning / registrering -->
+  <main id="auth-view" class="auth" hidden>
+    <section class="auth-card">
+      <h1 class="logo"><span class="logo-mark"></span>Whiteboard</h1>
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" class="tab" data-mode="login" aria-selected="true">Logga in</button>
+        <button type="button" role="tab" class="tab" data-mode="register" aria-selected="false">Skapa konto</button>
+      </div>
+      <form id="auth-form" novalidate>
+        <label>Användarnamn
+          <input name="username" autocomplete="username" required minlength="3" maxlength="32" autofocus>
+        </label>
+        <label>Lösenord
+          <input name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="72">
+        </label>
+        <p class="hint" id="auth-hint" hidden>Minst 3 tecken i användarnamnet (a–z, 0–9, _ . -) och minst 8 tecken i lösenordet.</p>
+        <p class="form-error" id="auth-error" role="alert"></p>
+        <button class="btn primary" type="submit" id="auth-submit">Logga in</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Själva tavlan -->
+  <div id="board-view" class="app" hidden>
+    <header class="topbar">
+      <div class="logo small"><span class="logo-mark"></span>Whiteboard</div>
+      <select id="board-select" aria-label="Välj board"></select>
+      <button class="btn" id="new-board-btn" title="Skapa en ny board">+ Board</button>
+      <button class="btn" id="share-btn" title="Välj vem som har tillgång">Dela</button>
+      <span class="spacer"></span>
+      <span id="sync-status" class="sync" title="Synkstatus"></span>
+      <button class="btn primary" id="new-note-btn">+ Ny lapp</button>
+      <span class="user" id="user-name"></span>
+      <button class="btn ghost" id="logout-btn">Logga ut</button>
+    </header>
+    <div id="canvas-wrap" class="canvas-wrap">
+      <div id="canvas" class="canvas">
+        <p id="empty-hint" class="empty-hint" hidden>Dubbelklicka var som helst eller tryck <b>+ Ny lapp</b> för att skapa en lapp.</p>
+      </div>
+      <div id="no-boards" class="no-boards" hidden>
+        <h2>Du har inga boards ännu</h2>
+        <p>Skapa en egen board, eller be någon dela sin board med dig.</p>
+        <button class="btn primary" id="first-board-btn">Skapa en board</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dialoger -->
+  <dialog id="board-dialog" class="dialog">
+    <form method="dialog" id="board-form">
+      <h2>Ny board</h2>
+      <label>Namn <input name="name" required maxlength="100" placeholder="t.ex. Projektplanering"></label>
+      <p class="form-error" role="alert"></p>
+      <menu>
+        <button class="btn ghost" value="cancel" formnovalidate>Avbryt</button>
+        <button class="btn primary" value="ok">Skapa</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <dialog id="share-dialog" class="dialog">
+    <form method="dialog" id="share-form">
+      <h2>Dela board</h2>
+      <p class="muted">Markera vilka användare som ska ha tillgång.</p>
+      <div id="share-list" class="share-list"></div>
+      <p class="form-error" role="alert"></p>
+      <menu>
+        <button class="btn ghost" value="cancel" formnovalidate>Avbryt</button>
+        <button class="btn primary" value="ok">Spara</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <template id="note-template">
+    <article class="note">
+      <header class="note-bar">
+        <div class="colors"></div>
+        <button class="icon-btn delete" title="Radera lapp" aria-label="Radera lapp">✕</button>
+      </header>
+      <textarea class="note-text" placeholder="Skriv något…" maxlength="5000"></textarea>
+      <footer class="note-meta"></footer>
+      <div class="resize-handle" title="Ändra storlek"></div>
+    </article>
+  </template>
+</body>
+</html>
